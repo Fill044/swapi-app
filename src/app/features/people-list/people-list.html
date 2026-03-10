@@ -1,0 +1,107 @@
+<div class="page-container">
+    <!-- Loading state overlay -->
+    <div class="progress-bar-container">
+        @if (isLoading()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+    </div>
+
+    <div class="content-header">
+        <h1>Star Wars Characters</h1>
+
+        <div class="filters-container">
+            <mat-form-field appearance="outline" class="search-input">
+                <mat-label>Search by Name</mat-label>
+                <input matInput placeholder="e.g. Luke" [value]="queryParams()['search'] || ''"
+                    (input)="onSearchInput($event)" aria-label="Search character by name">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="gender-select">
+                <mat-label>Gender Filter</mat-label>
+                <mat-select [value]="selectedGender()" (selectionChange)="onGenderChange($event.value)">
+                    <mat-option [value]="null">All Genders</mat-option>
+                    <mat-option value="male">Male</mat-option>
+                    <mat-option value="female">Female</mat-option>
+                    <mat-option value="n/a">N/A</mat-option>
+                    <mat-option value="unknown">Unknown</mat-option>
+                    <mat-option value="hermaphrodite">Hermaphrodite</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-stroked-button color="warn" (click)="resetFilters()">
+                Reset Filters
+            </button>
+        </div>
+    </div>
+
+    @if (hasError()) {
+    <div class="error-message">
+        <p>⚠️ Something went wrong while fetching data. Please try again.</p>
+    </div>
+    }
+
+    <!-- Data Display -->
+    <div class="table-wrapper mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource()" matSort (matSortChange)="onSortChange($event)">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let person"> {{person.name}} </td>
+            </ng-container>
+
+            <!-- Gender Column -->
+            <ng-container matColumnDef="gender">
+                <th mat-header-cell *matHeaderCellDef> Gender </th>
+                <td mat-cell *matCellDef="let person"> {{person.gender}} </td>
+            </ng-container>
+
+            <!-- Birth Year Column -->
+            <ng-container matColumnDef="birth_year">
+                <th mat-header-cell *matHeaderCellDef> Birth Year </th>
+                <td mat-cell *matCellDef="let person"> {{person.birth_year}} </td>
+            </ng-container>
+
+            <!-- Height Column -->
+            <ng-container matColumnDef="height">
+                <th mat-header-cell *matHeaderCellDef> Height </th>
+                <td mat-cell *matCellDef="let person"> {{person.height}} </td>
+            </ng-container>
+
+            <!-- Mass Column -->
+            <ng-container matColumnDef="mass">
+                <th mat-header-cell *matHeaderCellDef> Mass </th>
+                <td mat-cell *matCellDef="let person"> {{person.mass}} </td>
+            </ng-container>
+
+            <!-- Homeworld Column -->
+            <ng-container matColumnDef="homeworld">
+                <th mat-header-cell *matHeaderCellDef> Homeworld </th>
+                <td mat-cell *matCellDef="let person"> {{person.homeworld}} </td>
+            </ng-container>
+
+            <!-- Created Date Column -->
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef> Created </th>
+                <td mat-cell *matCellDef="let person"> {{person.created | date:'short'}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="7" style="text-align: center; padding: 2rem;">
+                    @if (isLoading()) {
+                    Loading data...
+                    } @else {
+                    No characters found.
+                    }
+                </td>
+            </tr>
+        </table>
+
+        <mat-paginator [length]="paginatorLength()" [pageSize]="10" [pageIndex]="(currentRoutePage() - 1)"
+            (page)="onPaginationChange($event)" hidePageSize aria-label="Select page of characters">
+        </mat-paginator>
+    </div>
+</div>

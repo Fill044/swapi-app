@@ -1,59 +1,53 @@
-# SwapiApp
+# SWAPI Character Explorer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+A lightweight Angular 21 application for browsing and filtering Star Wars characters using the [SWAPI](https://swapi.dev/) REST API. Built with a focus on modern Angular features and performance.
 
-## Development server
+## 🚀 Live Demo
+[Link to your Vercel deployment will go here]
 
-To start a local development server, run:
+## 🛠 Tech Stack & Architecture
+- **Framework:** Angular 21.2 (Standalone Components, Signals)
+- **UI & Styles:** Angular Material + SCSS
+- **State Management:** Signal-based reactive state with URL synchronization
+- **Testing:** Vitest
+- **Linting:** ESLint + Prettier
 
-```bash
-ng serve
-```
+## ✨ Key Features
+- **Server-side Search:** Real-time character search via API `?search=` parameter.
+- **Client-side Filtering:** Gender filtering implemented on top of the current dataset.
+- **URL Sync:** All filters, search queries, and pagination states are persisted in the URL.
+- **Optimization:** Intelligent caching for `Homeworld` data to reduce redundant API calls.
+- **Responsive UI:** Material-based layout optimized for both desktop and mobile.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 📦 Getting Started
 
-## Code scaffolding
+### Prerequisites
+- Node.js v22.x (LTS recommended)
+- Angular CLI `^21.2.1`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone <your-repo-url>
 
-```bash
-ng generate component component-name
-```
+2. Install dependencies:
+    ```bash
+    npm install
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Development
+Run ng serve for a dev server. Navigate to http://localhost:4200/.
 
-```bash
-ng generate --help
-```
+### Build
+Run ng build to generate a production-ready bundle in the dist/ directory.
 
-## Building
+### Testing
+Run ng test to execute unit tests via Vitest.
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Key Features & Architectural Decisions
+- URL-Driven State: The application implements a "Single Source of Truth" pattern where the browser URL is the primary state holder. Navigating back/forward in the browser works out of the box.
+- Optimized Data Fetching: - Smart Caching: SwapiService uses a local Map to cache planet data, preventing redundant API calls for characters sharing the same homeworld.
+- Race Condition Protection: Used switchMap in the data pipeline to cancel previous pending requests when a new search or page change occurs.
+- Modern Reactivity: Leverages Angular Signals for UI state management, resulting in fine-grained updates and improved performance via OnPush change detection.
+- Advanced UI/UX: - Real-time search with debounceTime(300) to avoid API spamming.
+- Responsive Material Table with horizontal scroll for mobile users.
+- European date formatting (en-GB) for better readability.
