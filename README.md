@@ -3,7 +3,7 @@
 A lightweight Angular 21 application for browsing and filtering Star Wars characters using the [SWAPI](https://swapi.dev/) REST API. Built with a focus on modern Angular features and performance.
 
 ## 🚀 Live Demo
-[Link to your Vercel deployment will go here]
+[https://swapi-app-prod.vercel.app/]
 
 ## 🛠 Tech Stack & Architecture
 - **Framework:** Angular 21.2 (Standalone Components, Signals)
