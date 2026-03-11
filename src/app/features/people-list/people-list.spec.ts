@@ -68,8 +68,8 @@ describe('PeopleList', () => {
     const mockReponse: ApiResponse<Person> = {
       count: 2, next: null, previous: null,
       results: [
-        { name: 'Luke', gender: 'male', birth_year: '19BBY', height: '172', mass: '77', created: '2024-12-19T10:00:00Z', edited: '2024-12-19T10:00:00Z', homeworld: 'Tatooine' },
-        { name: 'Leia', gender: 'female', birth_year: '19BBY', height: '150', mass: '49', created: '2024-12-19T10:00:00Z', edited: '2024-12-19T10:00:00Z', homeworld: 'Alderaan' }
+        { name: 'Luke', gender: 'male', birth_year: '19BBY', height: '172', mass: '77', created: '2024-12-19T10:00:00Z', edited: '2024-12-19T10:00:00Z', homeworld: 'Tatooine', species: [], films: [] },
+        { name: 'Leia', gender: 'female', birth_year: '19BBY', height: '150', mass: '49', created: '2024-12-19T10:00:00Z', edited: '2024-12-19T10:00:00Z', homeworld: 'Alderaan', species: [], films: [] }
       ]
     };
     swapiServiceMock.getPeople.mockReturnValue(of(mockReponse));

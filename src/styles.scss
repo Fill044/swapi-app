@@ -7,16 +7,12 @@
 
 html {
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
+  @include mat.theme((color: (primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
       density: 0,
-    )
-  );
+    ));
 }
 
 body {
@@ -35,5 +31,43 @@ body {
   // Reset the user agent margin.
   margin: 0;
   height: 100%;
+
+  // Custom Scrollbar
+  &::-webkit-scrollbar,
+  .scroll-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track,
+  .scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  // Light theme scrollbar (Default)
+  &::-webkit-scrollbar-thumb,
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
 }
-/* You can add global styles to this file, and also import other style files */
+
+// Global hook for Dark Mode scrollbar
+.dark-theme::-webkit-scrollbar-thumb,
+.dark-theme .scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+
+  &:hover {
+    background: rgba(0, 212, 255, 0.7);
+  }
+}
+
+html {
+  background-color: var(--mat-sys-surface);
+}

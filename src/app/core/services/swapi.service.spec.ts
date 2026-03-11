@@ -51,7 +51,7 @@ describe('SwapiService', () => {
 
         const mockPeopleResponse1: ApiResponse<Person> = {
             count: 1, next: null, previous: null,
-            results: [{ name: 'Luke', gender: 'male', birth_year: '19BBY', height: '172', mass: '77', created: 'date', edited: 'date', homeworld: planetUrl }]
+            results: [{ name: 'Luke', gender: 'male', birth_year: '19BBY', height: '172', mass: '77', created: 'date', edited: 'date', homeworld: planetUrl, species: [], films: [] }]
         };
 
         const mockPlanetResponse: Planet = {
@@ -74,7 +74,7 @@ describe('SwapiService', () => {
         // Second call: Should fetch people, but use cached planet
         const mockPeopleResponse2: ApiResponse<Person> = {
             count: 1, next: null, previous: null,
-            results: [{ name: 'Anakin', gender: 'male', birth_year: '41.9BBY', height: '188', mass: '84', created: 'date', edited: 'date', homeworld: planetUrl }]
+            results: [{ name: 'Anakin', gender: 'male', birth_year: '41.9BBY', height: '188', mass: '84', created: 'date', edited: 'date', homeworld: planetUrl, species: [], films: [] }]
         };
 
         service.getPeople(2).subscribe(res => {
