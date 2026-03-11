@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ViewChild, ElementRef, effect } from '@angular/core';
+import { DatePipe, DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -16,6 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { PersonDetailsDialog } from '../person-details-dialog/person-details-dialog';
 
 @Component({
   selector: 'app-people-list',
@@ -29,7 +34,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatSelectModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatChipsModule,
+    MatIconModule,
+    MatDialogModule
+  ],
+  animations: [
+    trigger('tableStagger', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(15px)' }),
+          stagger('50ms', [
+            animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
   ],
   templateUrl: './people-list.html',
   styleUrl: './people-list.scss',
@@ -39,12 +59,32 @@ export class PeopleList {
   private readonly swapiService = inject(SwapiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+  private readonly dialog = inject(MatDialog);
+
+  // Theme state
+  readonly isDarkMode = signal<boolean>(localStorage.getItem('theme') !== 'light');
+
+  constructor() {
+    effect(() => {
+      const isDark = this.isDarkMode();
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      // Global theme sync to avoid white scrollbar/overscroll gaps
+      if (this.document) {
+        this.document.body.classList.toggle('dark-theme', isDark);
+        this.document.body.classList.toggle('light-theme', !isDark);
+      }
+    });
+  }
 
   // Loading state & Error state
   readonly isLoading = signal<boolean>(false);
   readonly hasError = signal<boolean>(false);
 
-  displayedColumns: string[] = ['name', 'gender', 'birth_year', 'height', 'mass', 'homeworld', 'created'];
+  @ViewChild('searchInput') searchInputRef!: ElementRef<HTMLInputElement>;
+
+  displayedColumns: string[] = ['name', 'gender', 'species', 'birth_year', 'height', 'mass', 'homeworld', 'created'];
 
   readonly queryParams = toSignal(this.route.queryParams, { initialValue: {} as Record<string, string> });
   readonly currentRoutePage = computed(() => +(this.queryParams()['page'] || 1));
@@ -150,5 +190,32 @@ export class PeopleList {
       queryParams: { search: null, page: 1 },
       queryParamsHandling: 'merge'
     });
+  }
+
+  toggleTheme() {
+    this.isDarkMode.update(v => !v);
+  }
+
+  openPersonDetails(person: Person) {
+    const selection = window.getSelection();
+    // Do not open dialog if user is highlighting text
+    if (selection && selection.toString().length > 0) {
+      return;
+    }
+
+    this.dialog.open(PersonDetailsDialog, {
+      data: { person },
+      width: '400px',
+      maxWidth: '90vw',
+      panelClass: this.isDarkMode() ? 'dark-theme' : 'light-theme'
+    });
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key.toLowerCase() === 'f') {
+      event.preventDefault();
+      this.searchInputRef?.nativeElement.focus();
+    }
   }
 }

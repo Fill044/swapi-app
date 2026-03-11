@@ -5,8 +5,15 @@ export interface Person {
     height: string;
     mass: string;
     homeworld: string;
+    species: string[];
+    films: string[];
     created: string;
     edited: string;
+}
+
+export interface Species {
+    name: string;
+    url: string;
 }
 
 export interface Planet {
