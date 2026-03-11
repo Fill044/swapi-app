@@ -39,6 +39,14 @@ To showcase a commitment to both core requirements and extended UX/UI polish, th
 - **Modern Reactivity:** Leverages Angular Signals for UI state management, resulting in fine-grained updates and improved performance via `OnPush` change detection.
 - **Zone-less Friendly:** By using Signals and RxJS interoperability (`toSignal`), the app is architected with a future-proof, zone-less direction in mind.
 
+## 🧪 Testing Suite
+The application includes a comprehensive test suite using **Vitest**, covering core requirements and bonus objectives:
+
+* **Core Logic:** Unit tests for `SwapiService` ensuring correct API parameter mapping and intelligent caching of related entities (Planets & Species).
+* **Filter & Sort:** Tests for the `PeopleList` component verifying that client-side filtering and sorting produce the correct dataset.
+* **State Sync (Bonus):** Verification of query parameter synchronization, ensuring that UI actions (searching, paging) correctly update the browser URL.
+* **Component Integrity:** Testing of the Material Table rendering and interaction with the `PersonDetailsDialog` overlay.
+
 ## 📦 Getting Started
 
 ### Prerequisites
