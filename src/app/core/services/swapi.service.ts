@@ -73,15 +73,25 @@ export class SwapiService {
         );
     }
 
+    // private mapPeopleWithCachedData(response: ApiResponse<Person>): ApiResponse<Person> {
+    //     return {
+    //         ...response,
+    //         results: response.results.map((person) => ({
+    //             ...person,
+    //             homeworld: person.homeworld ? (this.homeworldCache.get(person.homeworld) ?? 'Unknown') : 'Unknown',
+    //             species: person.species && person.species.length > 0
+    //                 ? person.species.map(url => this.speciesCache.get(url) ?? 'Unknown')
+    //                 : ['Human'] // SWAPI default
+    //         }))
+    //     };
+    // }
     private mapPeopleWithCachedData(response: ApiResponse<Person>): ApiResponse<Person> {
         return {
             ...response,
             results: response.results.map((person) => ({
                 ...person,
                 homeworld: person.homeworld ? (this.homeworldCache.get(person.homeworld) ?? 'Unknown') : 'Unknown',
-                species: person.species && person.species.length > 0
-                    ? person.species.map(url => this.speciesCache.get(url) ?? 'Unknown')
-                    : ['Human'] // SWAPI default
+                species: (person.species || []).map(url => this.speciesCache.get(url) ?? 'Unknown')
             }))
         };
     }
